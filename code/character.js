@@ -1,10 +1,4 @@
-/**
-	Global representation of the mario character.
-	Code by Rob Kleffner, 2011
-*/
-
 Mario.Character = function() {
-    //these are static in Notch's code... here it doesn't seem necessary
     this.Large = false;
     this.Fire = false;
     this.Coins = 0;
@@ -12,8 +6,6 @@ Mario.Character = function() {
     this.LevelString = "none";
     this.GroundInertia = 0.89;
     this.AirInertia = 0.89;
-    
-    //non static variables in Notch's code
     this.RunTime = 0;
     this.WasOnGround = false;
     this.OnGround = false;
@@ -24,38 +16,27 @@ Mario.Character = function() {
     this.XJumpSpeed = 0;
     this.YJumpSpeed = 0;
     this.CanShoot = false;
-    
     this.Width = 4;
     this.Height = 24;
-    
-    //Level scene
     this.World = null;
     this.Facing = 0;
     this.PowerUpTime = 0;
-    
     this.XDeathPos = 0; this.YDeathPos = 0;
     this.DeathTime = 0;
     this.WinTime = 0;
     this.InvulnerableTime = 0;
-    
-    //Sprite
     this.Carried = null;
-    
     this.LastLarge = false;
     this.LastFire = false;
     this.NewLarge = false;
     this.NewFire = false;
 };
-
 Mario.Character.prototype = new Mario.NotchSprite(null);
-
 Mario.Character.prototype.Initialize = function(world) {
     this.World = world;
     this.X = 32;
     this.Y = 0;
 	this.PowerUpTime = 0;
-    
-    //non static variables in Notch's code
     this.RunTime = 0;
     this.WasOnGround = false;
     this.OnGround = false;
@@ -66,55 +47,42 @@ Mario.Character.prototype.Initialize = function(world) {
     this.XJumpSpeed = 0;
     this.YJumpSpeed = 0;
     this.CanShoot = false;
-    
     this.Width = 4;
     this.Height = 24;
-    
-    //Level scene
     this.World = world;
     this.Facing = 0;
     this.PowerUpTime = 0;
-    
     this.XDeathPos = 0; this.YDeathPos = 0;
     this.DeathTime = 0;
     this.WinTime = 0;
     this.InvulnerableTime = 0;
-    
-    //Sprite
     this.Carried = null;
-    
     this.SetLarge(this.Large, this.Fire);
 };
-
 Mario.Character.prototype.SetLarge = function(large, fire) {
     if (fire) {
         large = true;
     }
     if (!large) {
         fire = false;
-    }
-    
+    }  
     this.LastLarge = this.Large;
     this.LastFire = this.Fire;
     this.Large = large;
     this.Fire = fire;
     this.NewLarge = this.Large;
     this.NewFire = this.Fire;
-    
     this.Blink(true);
 };
-
 Mario.Character.prototype.Blink = function(on) {
     this.Large = on ? this.NewLarge : this.LastLarge;
-    this.Fire = on ? this.NewFire : this.LastFire;
-    
+    this.Fire = on ? this.NewFire : this.LastFire;  
     if (this.Large) {
         if (this.Fire) {
             this.Image = Enjine.Resources.Images["fireMario"];
         } else {
             this.Image = Enjine.Resources.Images["mario"];
         }
-        
         this.XPicO = 16;
         this.YPicO = 31;
         this.PicWidth = this.PicHeight = 32;
@@ -173,15 +141,8 @@ Mario.Character.prototype.Move = function() {
     this.Visible = (((this.InvulerableTime / 2) | 0) & 1) === 0;
     
     this.WasOnGround = this.OnGround;
-    var sideWaysSpeed = Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.A) ? 1.2 : 0.6;
-    
-    if (this.OnGround) {
-        if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down) && this.Large) {
-            this.Ducking = true;
-        } else {
-            this.Ducking = false;
-        }
-    }
+    var sideWaysSpeed = Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down) ? 1.2 : 0.6;
+
         
     if (this.Xa > 2) {
         this.Facing = 1;
@@ -190,7 +151,7 @@ Mario.Character.prototype.Move = function() {
         this.Facing = -1;
     }
     
-    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.S) || (this.JumpTime < 0 && !this.OnGround && !this.Sliding)) {
+    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Up) || (this.JumpTime < 0 && !this.OnGround && !this.Sliding)) {
         if (this.JumpTime < 0) {
             this.Xa = this.XJumpSpeed;
             this.Ya = -this.JumpTime * this.YJumpSpeed;
@@ -246,13 +207,13 @@ Mario.Character.prototype.Move = function() {
         this.Sliding = false;  
     }
     
-    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.A) && this.CanShoot && this.Fire && this.World.FireballsOnScreen < 2) {
+    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down) && this.CanShoot && this.Fire && this.World.FireballsOnScreen < 2) {
         Enjine.Resources.PlaySound("fireball");
         this.World.AddSprite(new Mario.Fireball(this.World, this.X + this.Facing * 6, this.Y - 20, this.Facing));
     }
     
-    this.CanShoot = !Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.A);
-    this.MayJump = (this.OnGround || this.Sliding) && !Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.S);
+    this.CanShoot = !Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down);
+    this.MayJump = (this.OnGround || this.Sliding) && !Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Up);
     this.XFlip = (this.Facing === -1);
     this.RunTime += Math.abs(this.Xa) + 5;
     
@@ -304,7 +265,7 @@ Mario.Character.prototype.Move = function() {
     if (this.Carried !== null) {
         this.Carried.X *= this.X + this.Facing * 8;
         this.Carried.Y *= this.Y - 2;
-        if (!Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.A)) {
+        if (!Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down)) {
             this.Carried.Release(this);
             this.Carried = null;
         }
@@ -544,7 +505,7 @@ Mario.Character.prototype.Stomp = function(object) {
         this.Sliding = false;
         this.InvulnerableTime = 1;
     } else if (object instanceof Mario.Shell) {
-        if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.A) && object.Facing === 0) {
+        if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down) && object.Facing === 0) {
             this.Carried = object;
             object.Carried = true;
         } else {
@@ -637,7 +598,7 @@ Mario.Character.prototype.Kick = function(shell) {
         return;
     }
     
-    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.A)) {
+    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down)) {
         this.Carried = shell;
         shell.Carried = true;
     } else {
