@@ -31,4 +31,4 @@ function CheckCaptcha($userResponse) {
     }
 }
     ?>
-    </body>
+    </body></html>
