@@ -1,6 +1,6 @@
+<!--That could be a great home page but unfortunately GitHub doesn't support php :(-->
 <html><head><script src="https://www.google.com/recaptcha/api.js"></script></head>
-<body>
-<form action="" method="POST"><div class="g-recaptcha" data-sitekey="6LdJ3dMZAAAAAFmpini8LeXIZFNfIdHtOOa35UwX"></div><br><input type="submit" value="Submit"></form>
+<body><form action="" method="POST"><div class="g-recaptcha" data-sitekey="6LdJ3dMZAAAAAFmpini8LeXIZFNfIdHtOOa35UwX"></div><br><input type="submit" value="Submit"></form>
 <?php
 if(isset($_POST['submit']))
 {
