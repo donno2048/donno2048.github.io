@@ -1,0 +1,142 @@
+<html><head></head><body data-new-gr-c-s-check-loaded="14.975.0" data-gr-ext-installed="" style="background-color: black;">
+    <script>
+    (function () {
+        'use strict';
+        window.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.position = 'fixed';
+            canvas.style.left = canvas.style.top = canvas.style.right = canvas.style.bottom = '0';
+            canvas.style.zIndex = -1;
+            document.body.appendChild(canvas);
+            try {var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');} catch (e) {}
+            if (!gl) {
+                document.getElementsByTagName('nowebgl')[0].style.display = 'block';
+                return;}
+            document.body.style.backgroundColor = 'black';
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            var kanjiVertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(kanjiVertexShader, document.getElementById('kanji-vertex-shader').textContent);
+            gl.compileShader(kanjiVertexShader);
+            console.log(gl.getShaderInfoLog(kanjiVertexShader));
+            var kanjiFragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(kanjiFragmentShader, document.getElementById('kanji-fragment-shader').textContent);
+            gl.compileShader(kanjiFragmentShader);
+            console.log(gl.getShaderInfoLog(kanjiFragmentShader));
+            var kanjiShaderProgram = gl.createProgram();
+            gl.attachShader(kanjiShaderProgram, kanjiVertexShader);
+            gl.attachShader(kanjiShaderProgram, kanjiFragmentShader);
+            gl.linkProgram(kanjiShaderProgram);
+            console.log(gl.getProgramInfoLog(kanjiShaderProgram));
+            var kanjiTimeUniform = gl.getUniformLocation(kanjiShaderProgram, "time");
+            var kanjiScaleUniform = gl.getUniformLocation(kanjiShaderProgram, "scale");
+            var kanjiSpeedUniform = gl.getUniformLocation(kanjiShaderProgram, "kanjiSpeed");
+            var kanjiPositionAttribute = gl.getAttribLocation(kanjiShaderProgram, "position");
+            var kanjiCenterAttribute = gl.getAttribLocation(kanjiShaderProgram, "kanjiCenter");
+            var kanjiProximityAttribute = gl.getAttribLocation(kanjiShaderProgram, "kanjiProximity");
+            var kanjiTextureCoordAttribute = gl.getAttribLocation(kanjiShaderProgram, "textureCoord");
+            var kanjiTextureUniform = gl.getUniformLocation(kanjiShaderProgram, "kanjiTexture");
+            var kanjiCanvas = document.createElement('canvas');
+            var kanjiCtx = kanjiCanvas.getContext('2d');
+            kanjiCtx.font = '30pt sans-serif';
+            kanjiCtx.textBaseline = 'top';
+            var kanjiActualSize = kanjiCtx.measureText('字').width;
+            var powerOfTwoTextureSize = Math.pow(2, Math.ceil(Math.log2((kanjiActualSize + 5) * 16)));
+            var kanjiSize = powerOfTwoTextureSize / 16;
+            kanjiCanvas.width = powerOfTwoTextureSize;
+            kanjiCanvas.height = powerOfTwoTextureSize;
+            kanjiCtx.font = '40pt sans-serif';
+            kanjiCtx.textBaseline = 'middle';
+            kanjiCtx.textAlign = 'center';
+            kanjiCtx.fillStyle = 'white';
+            for (var i = 0; i < 256; i++) {
+                var codepoint = 0x3400 + Math.floor(Math.random() * 0x6B00);
+                kanjiCtx.fillText(
+                    String.fromCharCode(codepoint),
+                    ((i % 16) + 0.5) * kanjiSize,
+                    (((i / 16) | 0) + 0.5) * kanjiSize);}
+            var kanjiTexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, kanjiTexture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, kanjiCanvas);
+            gl.generateMipmap(gl.TEXTURE_2D);
+            var squarePoints = [1, 1, -1, 1, -1, -1, -1, -1, 1, -1, 1, 1];
+            var kanjiVertexData = [];
+            var kanjiVertexArray;
+            var kanjiVertexBuffer = gl.createBuffer();
+            var FLOATS_PER_STAR_VERTEX = 7;
+            var FLOATS_PER_STAR = FLOATS_PER_STAR_VERTEX * (squarePoints.length / 2);
+            gl.useProgram(kanjiShaderProgram);
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, kanjiTexture);
+            gl.uniform1i(kanjiTextureUniform, 0);
+            gl.clearColor(0, 0, 0, 1);
+            window.onresize = function () {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+                gl.useProgram(kanjiShaderProgram);
+                gl.uniform2f(kanjiScaleUniform, 1 / window.innerWidth, 1 / window.innerHeight);
+                gl.uniform1f(kanjiSpeedUniform, (1440/canvas.width) / 8);
+                var kanjiCount = Math.floor(Math.sqrt(canvas.width * canvas.height));
+                var currentStarCount = kanjiVertexData.length / FLOATS_PER_STAR;
+                if (currentStarCount < kanjiCount) {
+                    for (var i = currentStarCount; i < kanjiCount; i++) {
+                        var x = Math.random() * 2 - 1, y = Math.random() * 2 - 1;
+                        var r = Math.random(), g = Math.random(), b = Math.random();
+                        var proximity = Math.pow(Math.random(), 4);
+                        var cornerU = Math.floor(Math.random() * 16) / 16;
+                        var cornerV = Math.floor(Math.random() * 16) / 16;
+                        for (var j = 0; j < squarePoints.length; j += 2) {
+                            kanjiVertexData.push(squarePoints[j], squarePoints[j + 1]);
+                            kanjiVertexData.push(x, y);
+                            kanjiVertexData.push(proximity);
+                            kanjiVertexData.push(cornerU + ((squarePoints[j] + 1) / 2) * (1 / 18));
+                            kanjiVertexData.push(cornerV + ((1 - squarePoints[j + 1]) / 2) * (1 / 18));}}
+                } else if (currentStarCount > kanjiCount) {kanjiVertexData.splice(kanjiCount * FLOATS_PER_STAR);}
+                kanjiVertexArray = new Float32Array(kanjiVertexData);
+                gl.bindBuffer(gl.ARRAY_BUFFER, kanjiVertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, kanjiVertexArray, gl.DYNAMIC_DRAW);
+                gl.enableVertexAttribArray(kanjiPositionAttribute);
+                gl.vertexAttribPointer(kanjiPositionAttribute, 2, gl.FLOAT, gl.FALSE, 7 * 4, 0);
+                gl.enableVertexAttribArray(kanjiCenterAttribute);
+                gl.vertexAttribPointer(kanjiCenterAttribute, 2, gl.FLOAT, gl.FALSE, 7 * 4, 2 * 4);
+                gl.enableVertexAttribArray(kanjiProximityAttribute);
+                gl.vertexAttribPointer(kanjiProximityAttribute, 1, gl.FLOAT, gl.FALSE, 7 * 4, 4 * 4);
+                gl.enableVertexAttribArray(kanjiTextureCoordAttribute);
+                gl.vertexAttribPointer(kanjiTextureCoordAttribute, 2, gl.FLOAT, gl.FALSE, 7 * 4, 5 * 4);};
+            window.onresize();
+            var initial = (new Date).getTime() / 1000;
+            (function render () {
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.useProgram(kanjiShaderProgram);
+                gl.uniform1f(kanjiTimeUniform, (new Date).getTime() / 1000 - initial);
+                gl.drawArrays(gl.TRIANGLES, 0, kanjiVertexData.length / FLOATS_PER_STAR_VERTEX);
+                requestAnimationFrame(render);}());};}());
+    </script>
+    <script type="application/glsl" id="kanji-vertex-shader">
+    uniform float time;
+    uniform vec2 scale;
+    uniform float kanjiSpeed;
+    attribute vec2 position;
+    attribute vec2 textureCoord;
+    attribute vec2 kanjiCenter;
+    attribute float kanjiProximity;
+    varying vec2 textureCoordOut;
+    void main()
+    {
+        float effectiveTime = time * kanjiSpeed * 2.0 * kanjiProximity;
+        vec2 calculatedCenter = vec2(mod(1.0 + (kanjiCenter.x + effectiveTime), 2.0) - 1.0, kanjiCenter.y);
+        vec2 size = max(36.0 * kanjiProximity, 10.0) * scale;
+        vec2 clippingCenter = calculatedCenter * (1.0 + size) - size / 2.0;
+        gl_Position = vec4(position * size + clippingCenter, 1.0 - kanjiProximity, 1.0);
+        textureCoordOut = textureCoord;
+    }
+    </script>
+    <script type="application/glsl" id="kanji-fragment-shader">
+    precision mediump float;
+    uniform sampler2D kanjiTexture;
+    varying vec2 textureCoordOut;
+    void main(){gl_FragColor = texture2D(kanjiTexture, textureCoordOut);}
+    </script><canvas width="721" height="530" style="position: fixed; inset: 0px; z-index: -1;"></canvas></body></html>
