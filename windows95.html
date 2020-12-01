@@ -1,0 +1,237 @@
+<html lang="en-US"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup Windows 95 in th web</title>
+<meta name="generator" content="Jekyll v3.9.0">
+<meta property="og:title" content="Setup:">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="still boring">
+<meta property="og:description" content="still boring">
+<link rel="canonical" href="https://donno2048.github.io/Win95.html">
+<meta property="og:url" content="https://donno2048.github.io/Win95.html">
+<meta property="og:site_name" content="donno2048.github.io">
+<script type="application/ld+json">
+{"@type":"WebPage","url":"https://donno2048.github.io/Win95.html","description":"still boring","headline":"Setup:","@context":"https://schema.org"}</script>
+    <link rel="stylesheet" href="/assets/css/style.css?v=0d0fd52b74cb5aaff7c14c2822df377a5a3726ca">
+  
+<meta name="NetsparkQuiltingResult" total-length="9568" removed="0" rules-found="w3125,w3424,w3425,w3426,w4445,w4778,w4779,w4829,w3049,w5069,w2318,w3173,w1497,w1502,w1503">
+</head>
+  <body data-new-gr-c-s-check-loaded="14.975.0" data-gr-ext-installed="">
+    <div class="container-lg px-3 my-5 markdown-body">
+      <h1 id="setup">Setup:</h1>
+<ul>
+  <li>Download and install <a href="https://sourceforge.net/projects/dosbox/files/latest/download">dosbox</a> to <em>C:\dosbox</em></li>
+  <li>Download <a href="http://www.rloe.com/randytheracer/622c.zip">622C</a> and extract it into <em>C:\dosbox</em></li>
+  <li>Download and install <a href="https://sourceforge.net/projects/bochs/files/latest/download">bochs</a> to <em>C:\bochs</em></li>
+  <li>Download and install <a href="https://www.osforensics.com/downloads/osfmount.exe">OSFMount</a></li>
+  <li>Download and install <a href="https://www.7-zip.org/a/7z1900-x64.exe">7-zip</a></li>
+  <li>Download the <a href="https://winworldpc.com/download/4120c593-e280-9818-c39a-11c3a4e284a2/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2">windows 95 installation</a> and extract it to <em>C:\windows95</em> using 7-zip
+    <h1 id="steps">Steps:</h1>
+    <ol>
+      <li>Copy <em>C:\bochs\bximage.exe</em> into <em>C:\dosbox</em> and run it, in the prompt press 1, and leave all the values as default (just press enter) except the hard disk size in megabytes which should be changed to 400</li>
+    </ol>
+  </li>
+</ul>
+<details>
+<summary>expected output</summary>
+
+```bat
+========================================================================
+                                bximage
+  Disk Image Creation / Conversion / Resize and Commit Tool for Bochs
+         $Id: bximage.cc 13481 2018-03-30 21:04:04Z vruppert $
+========================================================================
+
+1. Create new floppy or hard disk image
+2. Convert hard disk image to other format (mode)
+3. Resize hard disk image
+4. Commit 'undoable' redolog to base image
+5. Disk image info
+
+0. Quit
+
+Please choose one [0] 1
+
+Create image
+
+Do you want to create a floppy disk image or a hard disk image?
+Please type hd or fd. [hd]
+
+What kind of image should I create?
+Please type flat, sparse, growing, vpc or vmware4. [flat]
+
+Choose the size of hard disk sectors.
+Please type 512, 1024 or 4096. [512]
+
+Enter the hard disk size in megabytes, between 10 and 8257535
+[10] 400
+
+What should be the name of the image?
+[c.img]
+
+Creating hard disk image 'c.img' with CHS=812/16/63 (sector size = 512)
+
+The following line should appear in your bochsrc:
+  ata0-master: type=disk, path="c.img", mode=flat
+(The line is stored in your windows clipboard, use CTRL-V to paste)
+
+Press any key to continue
+```
+
+</details>
+
+<ol>
+  <li>Run <em>C:\dosbox\DOSBox.exe</em> and in it run:
+    <div class="language-bat highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">imgmount</span> <span class="m">2</span> <span class="kd">c</span>.img <span class="na">-size </span><span class="m">512</span><span class="o">,</span><span class="m">63</span><span class="o">,</span><span class="m">16</span><span class="o">,</span><span class="m">812</span> <span class="na">-t </span><span class="kd">hdd</span> <span class="na">-fs </span><span class="kd">none</span>
+<span class="kd">boot</span> <span class="m">622</span><span class="kd">c</span>.img
+<span class="nb">fdisk</span>
+<span class="m">1</span>
+<span class="m">1</span>
+<span class="kd">Y</span>
+</code></pre></div>    </div>
+  </li>
+  <li>When you see another prompt just press Enter to close DOSBox, then, open <em>C:\dosbox\DOSBox.exe</em> again and run:
+    <div class="language-bat highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">imgmount</span> <span class="kd">c</span> <span class="kd">c</span>.img
+<span class="kd">boot</span> <span class="m">622</span><span class="kd">c</span>.img
+<span class="nb">format</span> <span class="kd">c</span>:
+<span class="kd">y</span>
+<span class="kd">win95</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Close DOSBox, then, extract the content of all the image files in <em>C:\windows95</em> (except <em>Boot.img</em>) into a new folder named <em>C:\win95</em> (extract the image files themself by opening them in 7-zip)</li>
+  <li>Open OSFMount and choose <em>Mount new…</em> you need to find the image disk (<em>C:\dosbox\c.img</em>) then choose <em>Mount all partitions</em> option and uncheck the <em>read-only</em> option, then press <em>ok</em>, now if you open the file explorer you will see a new drive (D: in my case), drag&amp;drop the <em>C:\win95</em> folder into the new drive, then in OSFMount click on the new drive and then on <em>Dismount</em></li>
+  <li>Open <em>C:\dosbox\DOSBox.exe</em> and run:
+    <div class="language-bat highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">imgmount</span> <span class="kd">c</span> <span class="kd">c</span>.img
+<span class="kd">boot</span> <span class="m">622</span><span class="kd">c</span>.img
+<span class="kd">mouse</span>.com
+<span class="kd">c</span>:
+<span class="nb">cd</span> <span class="kd">win95</span>
+<span class="kd">setup</span> <span class="na">/is
+</span></code></pre></div>    </div>
+  </li>
+  <li>Close DOSBox, then from <em>C:\windows95\Boot.img</em> extract <em>AUTOEXEC.BAT</em> to a <strong>new</strong> folder named <em>win</em> using 7-zip and place <em>C:\dosbox\c.img</em> in the <em>win</em> folder, finally, in the <em>win</em> folder create a file named <em>dosbox.conf</em> with this content:</li>
+</ol>
+<details>
+<summary>Content</summary>
+
+```conf
+[sdl]
+fullscreen=false
+fulldouble=false
+fullresolution=original
+windowresolution=original
+output=surface
+autolock=true
+sensitivity=100
+waitonerror=true
+priority=higher,normal
+mapperfile=mapper-0.74-3.map
+usescancodes=true
+[dosbox]
+language=
+machine=svga_s3
+captures=capture
+memsize=16
+[render]
+frameskip=0
+aspect=false
+scaler=normal2x
+[cpu]
+core=normal
+cputype=pentium_slow
+cycles=auto
+cycleup=10
+cycledown=20
+[mixer]
+nosound=false
+rate=44100
+blocksize=1024
+prebuffer=25
+[midi]
+mpu401=intelligent
+mididevice=default
+midiconfig=
+[sblaster]
+sbtype=sb16
+sbbase=220
+irq=7
+dma=1
+hdma=5
+sbmixer=true
+oplmode=auto
+oplemu=default
+oplrate=44100
+[gus]
+gus=false
+gusrate=44100
+gusbase=240
+gusirq=5
+gusdma=3
+ultradir=C:\ULTRASND
+[speaker]
+pcspeaker=true
+pcrate=44100
+tandy=auto
+tandyrate=44100
+disney=true
+[joystick]
+joysticktype=auto
+timed=true
+autofire=false
+swap34=false
+buttonwrap=false
+[serial]
+serial1=dummy
+serial2=dummy
+serial3=disabled
+serial4=disabled
+[dos]
+xms=true
+ems=true
+umb=true
+keyboardlayout=auto
+[ipx]
+ipx=false
+[autoexec]
+imgmount c c.img 
+boot c.img
+```
+</details>
+
+<ol>
+  <li>Open bash command line (you might need to install it, you can follow <a href="https://www.howtogeek.com/249966">Chris Hoffman’s guide</a>) in the <em>win</em> folder and run:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>python2.7
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>git
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>binutils
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>cmake
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>automake
+<span class="nb">cd</span> ..
+git clone https://github.com/warpcoil/em-dosbox
+git clone https://github.com/emscripten-core/emsdk
+<span class="nb">mv </span>win em-dosbox/src
+<span class="nb">cd </span>emsdk
+<span class="nb">sudo </span>autoreconf <span class="nt">-f</span> <span class="nt">-i</span>
+./emsdk <span class="nb">install </span>latest
+./emsdk activate latest
+<span class="nb">source</span> ./emsdk_env.sh
+<span class="nb">cd</span> ../em-dosbox
+./autogen.sh
+emconfigure ./configure <span class="nt">--host</span><span class="o">=</span>none-none-none <span class="o">(</span><span class="nv">PPFLAGS</span><span class="o">=</span><span class="s2">"-s USE_SDL=2 -s USE_SDL_NET=2"</span> <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-s USE_SDL_NET=2"</span><span class="o">)</span>
+make
+<span class="nb">cd </span>src
+python packager.py win95 win AUTOEXEC.BAT
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  
+
+</body></html>
