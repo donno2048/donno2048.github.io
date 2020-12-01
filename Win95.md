@@ -1,11 +1,13 @@
-# Setup:
+<center><h1>How to run Windows™ 95<sup>©</sup> on the web</h1></p>
+
+## Setup:
 * Download and install [dosbox](https://sourceforge.net/projects/dosbox/files/latest/download) to _C:\dosbox_
 * Download [622C](http://www.rloe.com/randytheracer/622c.zip) and extract it into _C:\dosbox_
 * Download and install [bochs](https://sourceforge.net/projects/bochs/files/latest/download) to _C:\bochs_
 * Download and install [OSFMount](https://www.osforensics.com/downloads/osfmount.exe)
 * Download and install [7-zip](https://www.7-zip.org/a/7z1900-x64.exe)
 * Download the [windows 95 installation](https://winworldpc.com/download/4120c593-e280-9818-c39a-11c3a4e284a2/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2) and extract it to _C:\windows95_ using 7-zip
-# Steps:
+## Steps:
 1. Copy _C:\bochs\bximage.exe_ into _C:\dosbox_ and run it, in the prompt press 1, and leave all the values as default (just press enter) except the hard disk size in megabytes which should be changed to 400
 <details>
 <summary>expected output</summary>
