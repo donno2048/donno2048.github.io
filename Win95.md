@@ -188,7 +188,7 @@ sudo autoreconf -f -i
 source ./emsdk_env.sh
 cd ../em-dosbox
 ./autogen.sh
-emconfigure ./configure --host=none-none-none (PPFLAGS="-s USE_SDL=2 -s USE_SDL_NET=2" LDFLAGS="-s USE_SDL_NET=2")
+emconfigure ./configure --host=none-none-none PPFLAGS="-s USE_SDL=2 -s USE_SDL_NET=2" LDFLAGS="-s USE_SDL_NET=2"
 make
 cd src
 python packager.py win95 win AUTOEXEC.BAT
