@@ -9,54 +9,6 @@
 * Download the [windows 95 installation](https://winworldpc.com/download/4120c593-e280-9818-c39a-11c3a4e284a2/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2) and extract it to _C:\windows95_ using 7-zip
 ## Steps:
 1. Copy _C:\bochs\bximage.exe_ into _C:\dosbox_ and run it, in the prompt press 1, and leave all the values as default (just press enter) except the hard disk size in megabytes which should be changed to 400
-<details>
-<summary>expected output</summary>
-
-```bat
-========================================================================
-                                bximage
-  Disk Image Creation / Conversion / Resize and Commit Tool for Bochs
-         $Id: bximage.cc 13481 2018-03-30 21:04:04Z vruppert $
-========================================================================
-
-1. Create new floppy or hard disk image
-2. Convert hard disk image to other format (mode)
-3. Resize hard disk image
-4. Commit 'undoable' redolog to base image
-5. Disk image info
-
-0. Quit
-
-Please choose one [0] 1
-
-Create image
-
-Do you want to create a floppy disk image or a hard disk image?
-Please type hd or fd. [hd]
-
-What kind of image should I create?
-Please type flat, sparse, growing, vpc or vmware4. [flat]
-
-Choose the size of hard disk sectors.
-Please type 512, 1024 or 4096. [512]
-
-Enter the hard disk size in megabytes, between 10 and 8257535
-[10] 400
-
-What should be the name of the image?
-[c.img]
-
-Creating hard disk image 'c.img' with CHS=812/16/63 (sector size = 512)
-
-The following line should appear in your bochsrc:
-  ata0-master: type=disk, path="c.img", mode=flat
-(The line is stored in your windows clipboard, use CTRL-V to paste)
-
-Press any key to continue
-```
-
-</details>
-
 2. Run _C:\dosbox\DOSBox.exe_ and in it run:
 ```bat
 imgmount 2 c.img -size 512,63,16,812 -t hdd -fs none
@@ -86,9 +38,6 @@ cd win95
 setup /is
 ```
 7. Close DOSBox, then from _C:\windows95\Boot.img_ extract _AUTOEXEC.BAT_ to a **new** folder named _win_ using 7-zip and place _C:\dosbox\c.img_ in the _win_ folder, finally, in the _win_ folder create a file named _dosbox.conf_ with this content:
-<details>
-<summary>Content</summary>
-
 ```conf
 [sdl]
 fullscreen=false
@@ -171,8 +120,6 @@ ipx=false
 imgmount c c.img 
 boot c.img
 ```
-</details>
-
 8. Open bash command line (you might need to install it, you can follow [Chris Hoffman's guide](https://www.howtogeek.com/249966)) in the _win_ folder and run:
 ```bash
 sudo apt-get update
