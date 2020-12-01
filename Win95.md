@@ -1,4 +1,4 @@
-<center><h1>How to run Windows™ 95<sup>©</sup> on the web</h1></p>
+<p style="text-align: center;"><h1>How to run Windows™ 95<sup>©</sup> on the web</h1></p>
 
 ## Setup:
 * Download and install [dosbox](https://sourceforge.net/projects/dosbox/files/latest/download) to _C:\dosbox_
