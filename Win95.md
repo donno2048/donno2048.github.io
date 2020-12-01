@@ -1,4 +1,4 @@
-<p style="text-align: center;"><h1>How to run Windows™ 95<sup>©</sup> on the web</h1></p>
+<h1 align="center">How to run Windows™ 95<sup>©</sup> on the web</h1>
 
 ## Setup:
 * Download and install [dosbox](https://sourceforge.net/projects/dosbox/files/latest/download) to _C:\dosbox_
@@ -176,11 +176,7 @@ boot c.img
 8. Open bash command line (you might need to install it, you can follow [Chris Hoffman's guide](https://www.howtogeek.com/249966)) in the _win_ folder and run:
 ```bash
 sudo apt-get update
-sudo apt-get install python2.7
-sudo apt-get install git
-sudo apt-get install binutils
-sudo apt-get install cmake
-sudo apt-get install automake
+yes | sudo apt-get install python2.7 git binutils cmake automake
 cd ..
 git clone https://github.com/warpcoil/em-dosbox
 git clone https://github.com/emscripten-core/emsdk
