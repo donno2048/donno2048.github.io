@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html style="font-family:Georgia,Cambria,serif;font-size:.875em">
+    <head>
+        <link rel="icon" href="/icon/cat.ico">
+        <meta charset="utf-8">
+        <title>Window95 in the web</title>
+        <style>
+            code{font-size:1em;font-family:monospace,monospace}
+            pre{border-radius:10px;color:#333;padding:.66001rem 9.5px 9.5px;background:linear-gradient(to bottom,#fff 0,#fff .75rem,#f5f7fa .75rem,#f5f7fa 2.75rem,#fff 2.75rem,#fff 4rem);background-size:100% 4rem;font-family:monospace,monospace;font-size:1rem}
+            pre code{white-space:pre-wrap}
+            a{color:#35D7BB;text-decoration:none}
+        </style>
+    </head>
+    <body style="max-width:1024px;margin:0 auto;padding:2%;line-height:2rem;height: 100%;width: 100%;background: url(https://wallpaperaccess.com/full/1336598.jpg);background-repeat: no-repeat;background-attachment: fixed;">
+        <main style="color: white;background: rgba(0, 0, 0, 0.75);padding: 10px;width: 800px;margin-left: auto;margin-right: auto">
+            <p>
+                <center>
+                    <h1>How to run Windows™ 95<span style="font-size:75%;position:relative;top:-.5em">©</span> on the web</h1>
+                </center>
+            </p>
+            <h2>Setup:</h2>
+            <span>
+                <li>Download and install <a href="https://sourceforge.net/projects/dosbox/files/latest/download">dosbox</a> to <em>C:\dosbox</em></li>
+                <li>Download <a href="http://www.rloe.com/randytheracer/622c.zip">622C</a> and extract it into <em>C:\dosbox</em></li>
+                <li>Download and install <a href="https://sourceforge.net/projects/bochs/files/latest/download">bochs</a> to <em>C:\bochs</em></li>
+                <li>Download and install <a href="https://www.osforensics.com/downloads/osfmount.exe">OSFMount</a></li>
+                <li>Download and install <a href="https://www.7-zip.org/a/7z1900-x64.exe">7-zip</a></li>
+                <li>Download the <a href="https://winworldpc.com/download/4120c593-e280-9818-c39a-11c3a4e284a2/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2">windows 95 installation</a> and extract it to <em>C:\windows95</em> using 7-zip</li></span>
+            <h2>Steps:</h2>
+            <ol>
+                <li>Copy <em>C:\bochs\bximage.exe</em> into <em>C:\dosbox</em> and run it, in the prompt press 1, and leave all the values as default (just press enter) except the hard disk size in megabytes which should be changed to 400</li>
+                <li>Run <em>C:\dosbox\DOSBox.exe</em> and in it run:</li>
+            </ol>
+            <pre><code>imgmount <span style="color:#2aa198">2</span> c.img -size <span style="color:#2aa198">512</span>,<span style="color:#2aa198">63</span>,<span style="color:#2aa198">16</span>,<span style="color:#2aa198">812</span> -t hdd -<span style="color:#268bd2">fs</span> none<br>boot <span style="color:#2aa198">622</span>c.img<br>fdisk<br><span style="color:#2aa198">1</span><br><span style="color:#2aa198">1</span><br>Y</code></pre>
+            <ol start="3">
+                <li>When you see another prompt just press Enter to close DOSBox, then, open <em>C:\dosbox\DOSBox.exe</em> again and run:</li>
+            </ol>
+            <pre><code>imgmount c c.img<br>boot <span style="color:#2aa198">622</span>c.img<br><span style="color:#268bd2">format</span> c:<br>y<br>win95</code></pre>
+            <ol start="4">
+                <li>Close DOSBox, then, extract the content of all the image files in <em>C:\windows95</em> (except <em>Boot.img</em>) into a new folder named <em>C:\win95</em> (extract the image files themself by opening them in 7-zip)</li>
+                <li>Open OSFMount and choose <em>Mount new…</em> you need to find the image disk (<em>C:\dosbox\c.img</em>) then choose <em>Mount all partitions</em> option and uncheck the <em>read-only</em> option, then press <em>ok</em>, now if you open the file explorer you will see a new drive (D: in my case), drag&amp;drop the <em>C:\win95</em> folder into the new drive, then in OSFMount click on the new drive and then on <em>Dismount</em></li>
+                <li>Open <em>C:\dosbox\DOSBox.exe</em> and run:</li>
+            </ol>
+            <pre><code></code>imgmount c c.img<br>boot <span style="color:#2aa198">622</span>c.img<br>mouse.com<br><span>c:<br><span style="color:#268bd2">cd</span> <span style="color:#268bd2">win95</span><br><span style="color:#268bd2">setup</span> /<span style="color:#268bd2">is</span></span></code></pre>
+            <ol start="7">
+                <li>Close DOSBox, then from <em>C:\windows95\Boot.img</em> extract <em>AUTOEXEC.BAT</em> to a <strong>new</strong> folder named <em>win</em> using 7-zip and place <em>C:\dosbox\c.img</em> in the <em>win</em> folder, finally, download <a href="https://gist.github.com/donno2048/e9192c9030e37c18213b1c560eda7f80/archive/1141069f18b32a67df7ee164fc476b8ae79c61f4.zip">configuration</a> and unzip the <em>dosbox.conf</em> in it into the <em>win</em> folder</li>
+                <li>Open bash command line (you might need to install it, you can follow <a href="https://www.howtogeek.com/249966">Chris Hoffman’s guide</a>) in the <em>win</em> folder and run:</li>
+            </ol>
+            <pre><code>sudo apt-get update<br>yes | sudo apt-get install python2.<span style="color:#2aa198">7</span> git binutils cmake automake<br><span style="color:#268bd2">cd</span> ..<br>git <span style="color:#268bd2">clone</span> https://github.com/warpcoil/em-dosbox<br>git <span style="color:#268bd2">clone</span> https://github.com/emscripten-core/emsdk<br>mv win em-dosbox/src<br><span style="color:#268bd2">cd</span> emsdk<br>./emsdk install latest<br>./emsdk activate latest<br><span style="color:#268bd2">source</span> ./emsdk_env.sh<br><span style="color:#268bd2">cd</span> ../em-dosbox<br>sudo autoreconf <span>-f</span> -i<br>./autogen.sh<br>emconfigure ./configure --host=none-none-none CPPFLAGS=<span style="color:#2aa198">"-s USE_SDL=2 -s USE_SDL_NET=2 -s FETCH=1 -s LEGACY_GL_EMULATION=1"</span> LDFLAGS=<span style="color:#2aa198">"-s USE_SDL_NET=2"</span><br>rm VERSION<br>make<br><span style="color:#268bd2">cd</span> src<br>python packager.py win95 win AUTOEXEC.BAT</code></pre>
+        </main>
+    </body>
+</html>
