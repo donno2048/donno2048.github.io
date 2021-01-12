@@ -39,8 +39,9 @@
             <ol start="4">
                 <li>Close DOSBox, then, extract the content of all the image files in <em>C:\windows95</em> (except <em>Boot.img</em>) into a new folder named <em>C:\win95</em> (extract the image files themself by opening them in 7-zip)</li>
                 <li>Open OSFMount and choose <em>Mount new…</em> you need to find the image disk (<em>C:\dosbox\c.img</em>) then choose <em>Mount all partitions</em> option and uncheck the <em>read-only</em> option, then press <em>ok</em>, now if you open the file explorer you will see a new drive (D: in my case), drag&amp;drop the <em>C:\win95</em> folder into the new drive, then in OSFMount click on the new drive and then on <em>Dismount</em></li>
-                <li>Open bash command line in the <em>C:\dosbox</em> folder (you might need to install it, you can follow <a href="https://www.howtogeek.com/249966">Chris Hoffman’s guide</a>) and run the command: "sudo bash ./build.sh"</li>
+                <li>Open bash command line in the <em>C:\dosbox</em> folder (you might need to install it, you can follow <a href="https://www.howtogeek.com/249966">Chris Hoffman’s guide</a>) and run:</li>
             </ol>
+            <pre><code>sudo apt-get update<br>yes | sudo apt-get install python python3 git binutils cmake automake<br>git <span style="color:#268bd2">clone</span> https://github.com/donno2048/em-dosbox<br><span style="color:#268bd2">cd</span> em-dosbox<br>sudo bash ./build.sh</code></pre>
         </main>
     </body>
 </html>
