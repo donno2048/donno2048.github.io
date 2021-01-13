@@ -25,7 +25,7 @@
                 <li>Download and install <a href="https://sourceforge.net/projects/bochs/files/latest/download">bochs</a> to <em>C:\bochs</em></li>
                 <li>Download and install <a href="https://www.osforensics.com/downloads/osfmount.exe">OSFMount</a></li>
                 <li>Download and install <a href="https://www.7-zip.org/a/7z1900-x64.exe">7-zip</a></li>
-                <li>Download the <a href="https://winworldpc.com/download/4120c593-e280-9818-c39a-11c3a4e284a2/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2">windows 95 installation</a> and extract it to <em>C:\windows95</em> using 7-zip</li></span>
+                <li>Download the <a href="https://github.com/donno2048/Win95-source/archive/master.zip">windows 95 installation</a> and extract it to <em>C:\win95</em></li></span>
             <h2>Steps:</h2>
             <ol>
                 <li>Copy <em>C:\bochs\bximage.exe</em> into <em>C:\dosbox</em> and run it, in the prompt press 1, and leave all the values as default (just press enter) except the hard disk size in megabytes which should be changed to 400</li>
@@ -37,12 +37,11 @@
             </ol>
             <pre><code>imgmount c c.img<br>boot <span style="color:#2aa198">622</span>c.img<br><span style="color:#268bd2">format</span> c:<br>y<br>win95</code></pre>
             <ol start="4">
-                <li>Close DOSBox, then, extract the content of all the image files in <em>C:\windows95</em> (except <em>Boot.img</em>) into a new folder named <em>C:\win95</em> (extract the image files themself by opening them in 7-zip)</li>
-                <li>Open OSFMount and choose <em>Mount new…</em> you need to find the image disk (<em>C:\dosbox\c.img</em>) then choose <em>Mount all partitions</em> option and uncheck the <em>read-only</em> option, then press <em>ok</em>, now if you open the file explorer you will see a new drive (D: in my case), drag&amp;drop the <em>C:\win95</em> folder into the new drive, then in OSFMount click on the new drive and then on <em>Dismount</em></li>
+                <li>Close DOSBox, then, open OSFMount and choose <em>Mount new…</em> you need to find the image disk (<em>C:\dosbox\c.img</em>) then choose <em>Mount all partitions</em> option and uncheck the <em>read-only</em> option, then press <em>ok</em>, now if you open the file explorer you will see a new drive (D: in my case), drag&amp;drop the <em>C:\win95</em> folder into the new drive, then in OSFMount click on the new drive and then on <em>Dismount</em></li>
                 <li>Open <em>C:\dosbox\DOSBox.exe</em> and run:</li>
                 </ol>
             <pre><code></code>imgmount c c.img<br>boot <span style="color:#2aa198">622</span>c.img<br>mouse.com<br><span>c:<br><span style="color:#268bd2">cd</span> <span style="color:#268bd2">win95</span><br><span style="color:#268bd2">setup</span> /<span style="color:#268bd2">is</span></span></code></pre>
-            <ol start="7">
+            <ol start="6">
                 <li>Open bash command line in the <em>C:\dosbox</em> folder (you might need to install it, you can follow <a href="https://www.howtogeek.com/249966">Chris Hoffman’s guide</a>) and run:</li>
             </ol>
             <pre><code>sudo apt-get update<br>yes | sudo apt-get install python python3 git binutils cmake automake<br>git <span style="color:#268bd2">clone</span> https://github.com/donno2048/em-dosbox<br><span style="color:#268bd2">cd</span> em-dosbox<br>sudo bash ./build.sh</code></pre>
