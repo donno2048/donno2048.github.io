@@ -381,7 +381,7 @@
           for (var i=0;i<input.length;i++){
             if (!skip&&counted>=25&&input.charAt(i)==' '){skip=true;}
             else if (!skip){tmpStr+=input.charAt(i); counted++;}
-            else if (skip&&input.charAt(i)!=' '){lines.push(tmpStr); tmpStr=input.charAt(i); counted=1; skip=false;}
+            else if (input.charAt(i)!=' '){lines.push(tmpStr); tmpStr=input.charAt(i); counted=1; skip=false;}
             if (counted>max){max=counted;}
           }
           lines.push(tmpStr);
