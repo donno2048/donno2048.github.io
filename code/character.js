@@ -207,7 +207,7 @@ Mario.Character.prototype.Move = function() {
         this.Sliding = false;  
     }
     
-    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down) && this.CanShoot && this.Fire && this.World.FireballsOnScreen < 2) {
+    if (Enjine.KeyboardInput.IsKeyDown(Enjine.Keys.Down) && this.CanShoot && this.Fire) { //&& this.World.FireballsOnScreen < 2) {
         Enjine.Resources.PlaySound("fireball");
         this.World.AddSprite(new Mario.Fireball(this.World, this.X + this.Facing * 6, this.Y - 20, this.Facing));
     }
